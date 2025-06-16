@@ -1,18 +1,19 @@
-
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Ucapan Selamat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kang Inpo Depo</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f8ff;
       text-align: center;
-      padding: 50px;
+      padding: 50px 20px;
+      margin: 0;
+      overflow-x: hidden;
     }
+
     .card {
       background-color: #ffffff;
       border-radius: 15px;
@@ -20,28 +21,132 @@
       max-width: 500px;
       margin: auto;
       padding: 20px;
+      animation: fadeIn 1s ease-in-out;
+      position: relative;
+      z-index: 1;
     }
+
     img {
       width: 100%;
       border-radius: 10px;
     }
+
     h1 {
       color: #2e8b57;
+      margin-top: 20px;
     }
+
     p {
       font-size: 18px;
       color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .share-button {
+      margin-top: 15px;
+      background-color: #25D366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .share-button:hover {
+      background-color: #1ebd58;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
 
+  <canvas id="confetti-canvas"></canvas>
+
   <div class="card">
-    <img src="https://i.imgur.com/HXBQbCg.jpeg" alt="Ucapan dari Teman">
-    <h1>Selamat ya!</h1>
-    <p>Semoga semua usaha dan kerja kerasmu selalu membuahkan hasil terbaik.</p>
-    <p>Kamu keren! 💪🎉</p>
+    <img src="https://i.imgur.com/7UuHkzy.jpeg" alt="Gambar Kang Inpo Depo">
+    <h1>kang inpo depo kang</h1>
+    <p>Jangan lupa setorannya ya bang 😎</p>
+    <p>Dompet siap menampung 📲💸</p>
+    <button class="share-button" onclick="shareToWhatsApp()">Bagikan ke WhatsApp</button>
   </div>
 
+  <script>
+    // Efek konfeti
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    for (let i = 0; i < 150; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 2,
+        d: Math.random() * 150,
+        color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+        tilt: Math.random() * 10 - 5
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.ellipse(p.x, p.y, p.r, p.r / 2, p.tilt, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      update();
+    }
+
+    function update() {
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        p.y += 2 + Math.sin(p.d);
+        p.x += Math.sin(p.d);
+        if (p.y > canvas.height) {
+          p.y = -10;
+          p.x = Math.random() * canvas.width;
+        }
+      }
+    }
+
+    function animate() {
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Fungsi share WhatsApp
+    function shareToWhatsApp() {
+      const message = encodeURIComponent("kang inpo depo kang 😎💸\nDompet udah standby nih, gaskeun!");
+      window.open(`https://wa.me/?text=${message}`, "_blank");
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>
